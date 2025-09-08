@@ -44,3 +44,7 @@ yarn-error.log*
 
 # idea files
 .idea
+
+# other configs
+/.github/copilot-instructions.md
+/.vscode
