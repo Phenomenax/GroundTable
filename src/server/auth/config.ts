@@ -1,6 +1,8 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
+import type { Provider } from "next-auth/providers";
+import Credentials from "next-auth/providers/credentials";
 import { db } from "~/server/db";
 import {
   accounts,
@@ -30,13 +32,39 @@ declare module "next-auth" {
   // }
 }
 
+const providers: Provider[] = [
+  Credentials({
+    credentials: { password: { label: "Password", type: "password" } },
+    authorize(c) {
+      if (c.password !== "password") return null;
+      return {
+        id: "test",
+        name: "Test User",
+        email: "test@example.com",
+      };
+    },
+  }),
+  Google,
+];
+
+export const providerMap = providers
+  .map((provider) => {
+    if (typeof provider === "function") {
+      const providerData = provider();
+      return { id: providerData.id, name: providerData.name };
+    } else {
+      return { id: provider.id, name: provider.name };
+    }
+  })
+  .filter((provider) => provider.id !== "credentials");
+
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
-  providers: [Google],
+  providers,
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
@@ -51,5 +79,8 @@ export const authConfig = {
         id: user.id,
       },
     }),
+  },
+  pages: {
+    signIn: "/login",
   },
 } satisfies NextAuthConfig;
