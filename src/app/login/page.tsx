@@ -8,7 +8,7 @@ const SIGNIN_ERROR_URL = "/error";
 
 export default async function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
+    <main className="flex w-full min-h-screen flex-col items-center justify-center">
       <h1 className="text-3xl">Welcome to Joe&apos;s Airtable Clone</h1>
       <div className="mt-8 flex flex-col items-center justify-center gap-4 rounded-lg border-2 bg-white p-8 shadow-md">
         <h2 className="text-2xl">Sign in with Google to continue</h2>
