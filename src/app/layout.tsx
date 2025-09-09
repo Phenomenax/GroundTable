@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`}>
       <body>
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={false}>
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </SidebarProvider>
       </body>
