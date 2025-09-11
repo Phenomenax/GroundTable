@@ -6,9 +6,9 @@ import Link from "next/link";
 export default async function BasePage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ baseId: string }>;
 }) {
-  const { id } = await params;
+  const { baseId } = await params;
 
   return (
     <div className="flex min-h-screen w-full">
@@ -24,7 +24,7 @@ export default async function BasePage({
 
       <main className="flex-1">
         <div className="flex h-16 w-full items-center justify-between border-b p-4 shadow-xs">
-          Base ID: {id}
+          Base ID: {baseId}
         </div>
         <div className="bg-tablebg flex h-10 w-full border-b p-4 shadow-xs"></div>
       </main>

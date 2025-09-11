@@ -13,7 +13,7 @@ export function Bases() {
   const createBase = api.base.create.useMutation({
     onSuccess: async (base) => {
       await utils.base.getByUserId.invalidate();
-      router.replace(`/base/${base?.id}`);
+      router.replace(`/${base?.id}`);
       await utils.base.getByUserId.fetch();
     },
   });
