@@ -4,17 +4,26 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { bases } from "~/server/db/schema";
 
 export const baseRouter = createTRPCRouter({
-  getById: protectedProcedure.query(async ({ ctx }) => {
+  getByUserId: protectedProcedure.query(async ({ ctx }) => {
     const base = await ctx.db.query.bases.findMany({
       where: eq(bases.userId, ctx.session.user.id),
     });
     return base;
   }),
 
-  create: protectedProcedure.mutation(async ({ ctx }) => {
-    const newBase = await ctx.db.insert(bases).values({
-      userId: ctx.session.user.id,
+  getByBaseId: protectedProcedure
+    .input(z.string().uuid())
+    .query(async ({ ctx, input }) => {
+    const base = await ctx.db.query.bases.findFirst({
+      where: eq(bases.id, input),
     });
+    return base;
+  }),
+
+  create: protectedProcedure.mutation(async ({ ctx }) => {
+    const [newBase] = await ctx.db.insert(bases).values({
+      userId: ctx.session.user.id,
+    }).returning();
     return newBase;
   }),
 

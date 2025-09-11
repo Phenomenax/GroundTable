@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const SIGNIN_ERROR_URL = "/error";
 
-export default async function Home() {
+export default async function LoginPage() {
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center">
       <h1 className="text-3xl">Welcome to Joe&apos;s Airtable Clone</h1>

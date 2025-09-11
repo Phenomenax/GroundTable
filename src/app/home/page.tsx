@@ -13,11 +13,11 @@ import items from "~/app/constants/sidebarItems";
 import { api, HydrateClient } from "~/trpc/server";
 import { Bases } from "../components/bases";
 
-export default async function Home() {
+export default async function HomePage() {
   const session = await auth();
 
   if (session?.user) {
-    void api.base.getById.prefetch();
+    void api.base.getByUserId.prefetch();
   }
 
   return (
