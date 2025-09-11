@@ -1,10 +1,6 @@
 import { z } from "zod";
 import { eq } from "drizzle-orm";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { bases } from "~/server/db/schema";
 
 export const baseRouter = createTRPCRouter({
@@ -21,4 +17,12 @@ export const baseRouter = createTRPCRouter({
     });
     return newBase;
   }),
+
+  deleteById: protectedProcedure
+    .input(z.string().uuid())
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .delete(bases)
+        .where(eq(bases.id, input))
+    }),
 });

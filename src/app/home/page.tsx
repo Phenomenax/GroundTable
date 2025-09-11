@@ -9,37 +9,9 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "../components/ui/sidebar";
-import {
-  Home as HomeIcon,
-  Star as StarIcon,
-  ExternalLink as ShareIcon,
-  Users as WorkspaceIcon,
-} from "lucide-react";
+import items from "~/app/constants/sidebarItems";
 import { api, HydrateClient } from "~/trpc/server";
 import { Bases } from "../components/bases";
-
-const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: HomeIcon,
-  },
-  {
-    title: "Starred",
-    url: "#",
-    icon: StarIcon,
-  },
-  {
-    title: "Shared",
-    url: "#",
-    icon: ShareIcon,
-  },
-  {
-    title: "Workspaces",
-    url: "#",
-    icon: WorkspaceIcon,
-  },
-];
 
 export default async function Home() {
   const session = await auth();
