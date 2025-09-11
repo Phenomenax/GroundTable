@@ -24,22 +24,20 @@ export function Bases() {
 
   return (
     <div>
-        <Button
-          variant="outline"
-          className="w-30"
-          onClick={() => {
-            router.push("/base");
-            createBase.mutate();
-          }}
-        >
-          Create Base
-        </Button>
+      <Button
+        variant="outline"
+        className="w-30"
+        onClick={() => {
+          router.push("/base");
+          createBase.mutate();
+        }}
+      >
+        Create Base
+      </Button>
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {bases.map((base) => (
           <Card key={base.id}>
-            <CardTitle>
-              {base.name}
-            </CardTitle>
+            <CardTitle>{base.name}</CardTitle>
             <CardAction>
               <Button
                 variant="outline"

@@ -14,24 +14,25 @@ export const baseRouter = createTRPCRouter({
   getByBaseId: protectedProcedure
     .input(z.string().uuid())
     .query(async ({ ctx, input }) => {
-    const base = await ctx.db.query.bases.findFirst({
-      where: eq(bases.id, input),
-    });
-    return base;
-  }),
+      const base = await ctx.db.query.bases.findFirst({
+        where: eq(bases.id, input),
+      });
+      return base;
+    }),
 
   create: protectedProcedure.mutation(async ({ ctx }) => {
-    const [newBase] = await ctx.db.insert(bases).values({
-      userId: ctx.session.user.id,
-    }).returning();
+    const [newBase] = await ctx.db
+      .insert(bases)
+      .values({
+        userId: ctx.session.user.id,
+      })
+      .returning();
     return newBase;
   }),
 
   deleteById: protectedProcedure
     .input(z.string().uuid())
     .mutation(async ({ ctx, input }) => {
-      await ctx.db
-        .delete(bases)
-        .where(eq(bases.id, input))
+      await ctx.db.delete(bases).where(eq(bases.id, input));
     }),
 });
