@@ -12,8 +12,8 @@ export function Bases() {
 
   const createBase = api.base.create.useMutation({
     onSuccess: async (base) => {
-      await utils.base.getByUserId.invalidate();
       router.push(`/${base?.id}`);
+      await utils.base.getByUserId.invalidate();
       await utils.base.getByUserId.fetch();
     },
   });
