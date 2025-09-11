@@ -14,6 +14,7 @@ export function Bases() {
     onSuccess: async (base) => {
       await utils.base.getByUserId.invalidate();
       router.replace(`/base/${base?.id}`);
+      await utils.base.getByUserId.fetch();
     },
   });
   const deleteBase = api.base.deleteById.useMutation({
@@ -36,7 +37,7 @@ export function Bases() {
       </Button>
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {bases.map((base) => (
-          <Card key={base.id}>
+          <Card key={base.id} className="flex-row items-center justify-between px-8">
             <CardTitle>{base.name}</CardTitle>
             <CardAction>
               <Button
