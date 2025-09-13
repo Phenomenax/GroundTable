@@ -27,6 +27,11 @@ export const baseRouter = createTRPCRouter({
         userId: ctx.session.user.id,
       })
       .returning();
+
+    if (!newBase) {
+      throw new Error("Insert failed or no row returned");
+    }
+
     return newBase;
   }),
 

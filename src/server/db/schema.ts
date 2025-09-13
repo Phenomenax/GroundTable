@@ -76,16 +76,6 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }));
 
-export const verificationTokens = createTable(
-  "verification_token",
-  (d) => ({
-    identifier: d.varchar({ length: 255 }).notNull(),
-    token: d.varchar({ length: 255 }).notNull(),
-    expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
-  }),
-  (t) => [primaryKey({ columns: [t.identifier, t.token] })],
-);
-
 export const bases = createTable(
   "base",
   (d) => ({
@@ -98,15 +88,40 @@ export const bases = createTable(
     userId: d
       .uuid()
       .notNull()
-      .references(() => users.id),
-    createdAt: d
-      .timestamp({ withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    openedAt: d
-      .timestamp({ withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: d.timestamp({ withTimezone: true }).defaultNow().notNull(),
+    updatedAt: d.timestamp({ withTimezone: true }).defaultNow().notNull(),
+    tableCount: d.integer().default(0).notNull(),
   }),
   (t) => [index("user_id_idx").on(t.userId)],
 );
+
+export const tables = createTable(
+  "table",
+  (d) => ({
+    id: d
+      .uuid()
+      .notNull()
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    name: d.varchar({ length: 256 }).notNull(),
+    createdAt: d.timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: d.timestamp("updated_at", { withTimezone: true }).defaultNow(),
+    baseId: d
+      .uuid("base_id")
+      .notNull()
+      .references(() => bases.id, { onDelete: "cascade" }),
+  }),
+  (t) => [index("base_id_idx").on(t.baseId)],
+);
+
+export const basesRelations = relations(bases, ({ many }) => ({
+  tables: many(tables),
+}));
+
+export const tablesRelations = relations(tables, ({ one }) => ({
+  base: one(bases, {
+    fields: [tables.baseId],
+    references: [bases.id],
+  }),
+}));
