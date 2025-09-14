@@ -1,7 +1,7 @@
 "use client";
 import { api } from "~/trpc/react";
-import { Card, CardAction, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
+import { Card, CardAction, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 

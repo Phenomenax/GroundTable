@@ -11,7 +11,7 @@ import {
 } from "../components/ui/sidebar";
 import items from "~/app/constants/sidebarItems";
 import { api, HydrateClient } from "~/trpc/server";
-import { Bases } from "../components/bases";
+import { Bases } from "./components/bases";
 
 export default async function HomePage() {
   const session = await auth();

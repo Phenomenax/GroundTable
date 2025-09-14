@@ -8,7 +8,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "../components/ui/pagination";
-import { TableView } from "../components/tables";
+import { TableView } from "./components/tables";
 
 type Base = {
   id: string;

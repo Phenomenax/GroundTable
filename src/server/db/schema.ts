@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm";
-import { index, pgTableCreator, primaryKey } from "drizzle-orm/pg-core";
+import { index, pgEnum, pgTableCreator, primaryKey } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
 /**
@@ -125,3 +125,39 @@ export const tablesRelations = relations(tables, ({ one }) => ({
     references: [bases.id],
   }),
 }));
+
+export const columnTypeEnum = pgEnum("column_type", ["text", "number"]);
+
+export const columns = createTable(
+  "column",
+  (d) => ({
+    id: d
+      .uuid()
+      .notNull()
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    tableId: d
+      .uuid("table_id")
+      .notNull()
+      .references(() => tables.id, { onDelete: "cascade" }),
+    name: d.varchar({ length: 256 }).notNull(),
+    type: columnTypeEnum("type").notNull(),
+    position: d.numeric({ precision: 12, scale: 3 }).notNull().default("1000"),
+    isRequired: d.boolean("is_required").notNull().default(false),
+    settings: d
+      .jsonb("settings")
+      // 例如：{ precision?: number, unit?: string, options?: [{id,name,color}], linkTargetTableId?: uuid }
+      .$type<{
+        precision?: number;
+        unit?: string;
+        options?: { id: string; name: string; color?: string }[];
+        linkTargetTableId?: string;
+      }>(),
+    createdAt: d.timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: d.timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  }),
+  (t) => [
+    index("column_table_idx").on(t.tableId),
+    index("column_pos_idx").on(t.position),
+  ],
+);
