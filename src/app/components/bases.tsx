@@ -15,18 +15,9 @@ export function Bases() {
 
   const createBase = api.base.create.useMutation({
     onSuccess: async (base) => {
+      await createTable.mutateAsync(base.id);
       router.push(`/${base.id}`);
-
-      console.log("Creating initial table for base:", base.id);
-
-      const table = await createTable.mutateAsync(base.id);
-
-      console.log("Created initial table:", table.id);
-
-      router.push(`/${base.id}/${table.id}`);
-
       await utils.base.getByUserId.invalidate();
-      await utils.base.getByUserId.fetch();
     },
   });
   const deleteBase = api.base.deleteById.useMutation({

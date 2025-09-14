@@ -8,6 +8,11 @@ export const baseRouter = createTRPCRouter({
     const base = await ctx.db.query.bases.findMany({
       where: eq(bases.userId, ctx.session.user.id),
     });
+
+    if (!base) {
+      throw new Error("Bases not found");
+    }
+
     return base;
   }),
 
@@ -17,6 +22,11 @@ export const baseRouter = createTRPCRouter({
       const base = await ctx.db.query.bases.findFirst({
         where: eq(bases.id, input),
       });
+
+      if (!base) {
+        throw new Error("Base not found");
+      }
+
       return base;
     }),
 

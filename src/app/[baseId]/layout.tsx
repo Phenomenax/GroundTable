@@ -9,8 +9,7 @@ import Link from "next/link";
 
 export default function BasePageLayout({
   children,
-  table,
-}: Readonly<{ children: React.ReactNode; table: React.ReactNode }>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <SidebarProvider defaultOpen={false}>
       <div className="flex min-h-screen w-full">
@@ -23,10 +22,7 @@ export default function BasePageLayout({
             </Link>
           </SidebarHeader>
         </Sidebar>
-        <main className="flex-1">
-          {children}
-          {table}
-        </main>
+        <main className="flex-1">{children}</main>
       </div>
     </SidebarProvider>
   );
