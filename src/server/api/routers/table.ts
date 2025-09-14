@@ -51,4 +51,18 @@ export const tableRouter = createTRPCRouter({
 
       return result;
     }),
+
+  getByTableId: protectedProcedure
+    .input(z.string().uuid())
+    .query(async ({ ctx, input }) => {
+      const table = await ctx.db.query.tables.findFirst({
+        where: eq(tables.id, input),
+      });
+
+      if (!table) {
+        throw new Error("Table not found");
+      }
+
+      return table;
+    }),
 });

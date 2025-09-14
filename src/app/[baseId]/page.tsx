@@ -8,6 +8,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "../components/ui/pagination";
+import { TableView } from "../components/tables";
 
 type Base = {
   id: string;
@@ -92,9 +93,7 @@ export default function BasePage({
       </Pagination>
       <div>
         {activeTableId ? (
-          <div>
-            Table chosen: {tables?.find((t) => t.id === activeTableId)?.name}
-          </div>
+          <TableView tableId={activeTableId} />
         ) : (
           <div>Loading</div>
         )}
