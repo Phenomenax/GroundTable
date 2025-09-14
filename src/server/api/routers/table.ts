@@ -65,4 +65,10 @@ export const tableRouter = createTRPCRouter({
 
       return table;
     }),
+
+  deleteById: protectedProcedure
+    .input(z.string().uuid())
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.delete(tables).where(eq(tables.id, input));
+    }),
 });

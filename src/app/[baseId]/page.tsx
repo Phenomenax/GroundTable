@@ -9,6 +9,7 @@ import {
   PaginationLink,
 } from "../components/ui/pagination";
 import { TableView } from "./components/tables";
+import { X } from "lucide-react";
 
 type Base = {
   id: string;
@@ -45,6 +46,11 @@ export default function BasePage({
 
   const utils = api.useUtils();
   const createTable = api.table.createByBaseId.useMutation();
+  const deleteTable = api.table.deleteById.useMutation({
+    onSuccess: async () => {
+      await utils.table.getByBaseId.invalidate(baseId);
+    },
+  });
 
   return (
     <div>
@@ -86,6 +92,20 @@ export default function BasePage({
                 size="lg"
               >
                 {table.name}
+                <Button variant="link" size="icon" onClick={(e) => {
+                  e.preventDefault();         // 阻止 PaginationLink 的默认行为
+                  e.stopPropagation();
+                  
+                  if (activeTableId === table.id) {
+                    const current = utils.table.getByBaseId.getData(baseId) ?? tables ?? [];
+                    const next = current.find(t => t.id !== table.id)?.id;
+                    setActiveTableId(next); // 可能为 undefined，下面的 TableView 会处理
+                  }
+
+                  deleteTable.mutate(table.id);
+                }}>
+                  <X />
+                </Button>
               </PaginationLink>
             </PaginationItem>
           ))}
