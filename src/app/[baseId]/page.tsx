@@ -71,21 +71,23 @@ export default function BasePage({
     <div>
       <div className="flex h-16 w-full items-center justify-between border-b p-4 shadow-xs">
         {baseIsLoading ? "Loading..." : base?.name}
-        <Button
-          variant="outline"
-          size="lg"
-          onClick={async () => {
-            if (!base) return;
-            createTable.mutate(base.id, {
-              onSuccess: () => {
-                void utils.table.getByBaseId.invalidate(base.id);
-              },
-            });
-          }}
-        >
-          Create Table
-        </Button>
-        {isSaving ? <Spinner /> : null}
+        <div>
+          {isSaving ? <Spinner /> : null}
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={async () => {
+              if (!base) return;
+              createTable.mutate(base.id, {
+                onSuccess: () => {
+                  void utils.table.getByBaseId.invalidate(base.id);
+                },
+              });
+            }}
+          >
+            Create Table
+          </Button>
+        </div>
       </div>
       {/* <div className="bg-tablebg flex items-center h-10 w-full border-b shadow-xs">
         {tables?.map((table) => (
