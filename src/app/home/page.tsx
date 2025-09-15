@@ -1,5 +1,4 @@
-import { auth, signOut } from "~/server/auth";
-import { Button } from "../components/ui/button";
+import { auth } from "~/server/auth";
 import {
   Sidebar,
   SidebarContent,
@@ -7,7 +6,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from "../components/ui/sidebar";
 import items from "~/app/constants/sidebarItems";
 import { api, HydrateClient } from "~/trpc/server";
