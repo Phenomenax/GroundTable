@@ -12,6 +12,7 @@ import { TableView } from "./components/tables";
 import { X } from "lucide-react";
 import { useIsMutating } from "@tanstack/react-query";
 import { Spinner } from "../components/ui/spinner";
+import { SidebarProvider } from "../components/ui/sidebar";
 
 type Base = {
   id: string;
@@ -134,13 +135,13 @@ export default function BasePage({
           ))}
         </PaginationContent>
       </Pagination>
-      <div>
+      <SidebarProvider defaultOpen={true}>
         {activeTableId ? (
           <TableView tableId={activeTableId} />
         ) : (
           <div>Loading</div>
         )}
-      </div>
+      </SidebarProvider>
     </div>
   );
 }

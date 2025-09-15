@@ -29,7 +29,6 @@ export function Bases() {
       return { previousBases };
     },
     onError: (err, newPost, ctx) => {
-      // If the mutation fails, use the context-value from onMutate
       utils.base.getByUserId.setData(undefined, ctx?.previousBases);
     },
     onSuccess: async () => {

@@ -144,20 +144,54 @@ export const columns = createTable(
     type: columnTypeEnum("type").notNull(),
     position: d.numeric({ precision: 12, scale: 3 }).notNull().default("1000"),
     isRequired: d.boolean("is_required").notNull().default(false),
-    settings: d
-      .jsonb("settings")
-      // 例如：{ precision?: number, unit?: string, options?: [{id,name,color}], linkTargetTableId?: uuid }
-      .$type<{
-        precision?: number;
-        unit?: string;
-        options?: { id: string; name: string; color?: string }[];
-        linkTargetTableId?: string;
-      }>(),
     createdAt: d.timestamp("created_at", { withTimezone: true }).defaultNow(),
     updatedAt: d.timestamp("updated_at", { withTimezone: true }).defaultNow(),
   }),
   (t) => [
     index("column_table_idx").on(t.tableId),
     index("column_pos_idx").on(t.position),
+  ],
+);
+
+export const rows = createTable(
+  "row",
+  (d) => ({
+    id: d
+      .uuid()
+      .notNull()
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    tableId: d
+      .uuid("table_id")
+      .notNull()
+      .references(() => tables.id, { onDelete: "cascade" }),
+    position: d.numeric({ precision: 12, scale: 3 }).notNull().default("1000"),
+    createdAt: d.timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: d.timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  }),
+  (t) => [
+    index("row_table_idx").on(t.tableId),
+    index("row_pos_idx").on(t.position),
+  ],
+);
+
+export const cells = createTable(
+  "cell",
+  (d) => ({
+    rowId: d
+      .uuid("row_id")
+      .notNull()
+      .references(() => rows.id, { onDelete: "cascade" }),
+    columnId: d
+      .uuid("column_id")
+      .notNull()
+      .references(() => columns.id, { onDelete: "cascade" }),
+    value: d.text().notNull().default(""),
+    updatedAt: d.timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  }),
+  (t) => [
+    primaryKey({ columns: [t.rowId, t.columnId], name: "cell_pk" }),
+    index("cell_row_idx").on(t.rowId),
+    index("cell_col_idx").on(t.columnId),
   ],
 );

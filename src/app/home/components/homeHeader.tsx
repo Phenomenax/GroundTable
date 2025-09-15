@@ -21,10 +21,7 @@ export default function HomeHeader() {
 
       {isSaving ? <Spinner /> : null}
 
-      <Button
-        size="lg"
-        onClick={() => signOut({ redirectTo: "/login" })}
-      >
+      <Button size="lg" onClick={() => signOut({ redirectTo: "/login" })}>
         Sign out
       </Button>
     </div>
