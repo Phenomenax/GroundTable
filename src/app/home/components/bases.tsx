@@ -1,15 +1,12 @@
 "use client";
 import { api } from "~/trpc/react";
 import { Card, CardAction, CardTitle } from "../../components/ui/card";
-import { Spinner } from "~/app/components/ui/spinner";
 import { Button } from "../../components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
 
 export function Bases() {
   const router = useRouter();
-  const [isSaving, setIsSaving] = useState(false);
   const [bases] = api.base.getByUserId.useSuspenseQuery();
   const createTable = api.table.createByBaseId.useMutation();
 
@@ -24,7 +21,6 @@ export function Bases() {
   });
   const deleteBase = api.base.deleteById.useMutation({
     onMutate: async (base) => {
-      setIsSaving(true);
       await utils.base.getByUserId.cancel();
       const previousBases = utils.base.getByUserId.getData();
       utils.base.getByUserId.setData(undefined, (old) =>
@@ -38,9 +34,6 @@ export function Bases() {
     },
     onSuccess: async () => {
       await utils.base.getByUserId.invalidate();
-    },
-    onSettled: () => {
-      setIsSaving(false);
     },
   });
 

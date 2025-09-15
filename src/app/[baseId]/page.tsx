@@ -10,6 +10,8 @@ import {
 } from "../components/ui/pagination";
 import { TableView } from "./components/tables";
 import { X } from "lucide-react";
+import { useIsMutating } from "@tanstack/react-query";
+import { Spinner } from "../components/ui/spinner";
 
 type Base = {
   id: string;
@@ -33,6 +35,8 @@ export default function BasePage({
     isLoading: tablesIsLoading,
     isSuccess: tableIsLoaded,
   } = api.table.getByBaseId.useQuery(baseId);
+  const mutatingCount = useIsMutating();
+  const isSaving = mutatingCount > 0;
 
   const [activeTableId, setActiveTableId] = useState<string | undefined>(
     undefined,
@@ -47,6 +51,17 @@ export default function BasePage({
   const utils = api.useUtils();
   const createTable = api.table.createByBaseId.useMutation();
   const deleteTable = api.table.deleteById.useMutation({
+    onMutate: async (tableId) => {
+      await utils.table.getByBaseId.cancel();
+      const previousTables = utils.table.getByBaseId.getData(baseId);
+      utils.table.getByBaseId.setData(baseId, (old) =>
+        old?.filter((t) => t.id !== tableId),
+      );
+      return { previousTables };
+    },
+    onError: (err, newPost, ctx) => {
+      utils.table.getByBaseId.setData(baseId, ctx?.previousTables);
+    },
     onSuccess: async () => {
       await utils.table.getByBaseId.invalidate(baseId);
     },
@@ -70,6 +85,7 @@ export default function BasePage({
         >
           Create Table
         </Button>
+        {isSaving ? <Spinner /> : null}
       </div>
       {/* <div className="bg-tablebg flex items-center h-10 w-full border-b shadow-xs">
         {tables?.map((table) => (
