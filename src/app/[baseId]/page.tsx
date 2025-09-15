@@ -71,7 +71,7 @@ export default function BasePage({
     <div>
       <div className="flex h-16 w-full items-center justify-between border-b p-4 shadow-xs">
         {baseIsLoading ? "Loading..." : base?.name}
-        <div>
+        <div className="flex items-center justify-center gap-4">
           {isSaving ? <Spinner /> : null}
           <Button
             variant="outline"
