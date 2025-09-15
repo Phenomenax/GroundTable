@@ -12,6 +12,8 @@ import {
 import items from "~/app/constants/sidebarItems";
 import { api, HydrateClient } from "~/trpc/server";
 import { Bases } from "./components/bases";
+import HomeHeader from "./components/homeHeader";
+import { SessionProvider } from "next-auth/react";
 
 export default async function HomePage() {
   const session = await auth();
@@ -23,24 +25,9 @@ export default async function HomePage() {
   return (
     <HydrateClient>
       <main className="flex min-h-screen w-full flex-col items-center">
-        <div className="flex h-12 w-full items-center justify-between border-b p-4 shadow-xs">
-          <div className="flex gap-4">
-            <SidebarTrigger />
-            <h1 className="text-xl font-bold">Airtable</h1>
-          </div>
-
-          <p>Logged in as {session?.user.email}</p>
-
-          <form
-            action={async () => {
-              await signOut({ redirectTo: "/login" });
-            }}
-          >
-            <Button size={"lg"} type="submit">
-              Sign out
-            </Button>
-          </form>
-        </div>
+        <SessionProvider>
+          <HomeHeader />
+        </SessionProvider>
 
         <div className="bg-airtable flex h-full w-full gap-4 border-r shadow-xs">
           <Sidebar side="left" collapsible="icon">
