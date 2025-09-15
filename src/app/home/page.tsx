@@ -33,7 +33,6 @@ export default async function HomePage() {
 
           <form
             action={async () => {
-              "use server";
               await signOut({ redirectTo: "/login" });
             }}
           >
