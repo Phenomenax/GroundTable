@@ -14,7 +14,7 @@ export default function HomeHeader() {
     <div className="flex h-12 w-full items-center justify-between border-b p-4 shadow-xs">
       <div className="flex gap-4">
         <SidebarTrigger />
-        <h1 className="text-xl font-bold">Airtable</h1>
+        <h1 className="text-xl font-bold">GroundTable</h1>
       </div>
 
       <p>Logged in as {session?.data?.user?.email}</p>

@@ -6,7 +6,7 @@ import { Geist } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
-  title: "Airtable Clone",
+  title: "GroundTable",
   description: "A clone of Airtable built with T3 stack",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };

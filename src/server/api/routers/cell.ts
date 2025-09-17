@@ -1,6 +1,6 @@
 // ~/server/api/routers/cell.ts
 import { z } from "zod";
-import { and, eq, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   bases,
@@ -8,7 +8,6 @@ import {
   columns,
   rows,
   cells,
-  columnTypeEnum, // enum in schema: ["text", "number"]
 } from "~/server/db/schema";
 
 export const cellRouter = createTRPCRouter({
@@ -17,8 +16,8 @@ export const cellRouter = createTRPCRouter({
       z.object({
         tableId: z.string().uuid(),
         name: z.string().min(1).max(256),
-        type: z.enum(["text", "number"]), // 对应你的 columnTypeEnum
-        position: z.number().optional(), // 若不传，用一个简单策略自动设置
+        type: z.enum(["text", "number"]),
+        position: z.number().optional(),
         isRequired: z.boolean().optional(),
       }),
     )
@@ -26,7 +25,6 @@ export const cellRouter = createTRPCRouter({
       const { tableId, name, type, position, isRequired } = input;
 
       return await ctx.db.transaction(async (tx) => {
-        // 1) 计算列的 position（简单策略：取现有最大 position + 1000）
         let pos = position;
         if (pos === undefined) {
           const max = await tx
