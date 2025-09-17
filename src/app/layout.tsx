@@ -5,6 +5,8 @@ import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
+import { Analytics } from "@vercel/analytics/next";
+
 export const metadata: Metadata = {
   title: "GroundTable",
   description: "A clone of Airtable built with T3 stack",
@@ -22,7 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          {children}
+          <Analytics />
+        </TRPCReactProvider>
       </body>
     </html>
   );

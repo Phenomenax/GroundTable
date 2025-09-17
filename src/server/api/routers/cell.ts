@@ -2,13 +2,7 @@
 import { z } from "zod";
 import { eq, sql } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import {
-  bases,
-  tables,
-  columns,
-  rows,
-  cells,
-} from "~/server/db/schema";
+import { bases, tables, columns, rows, cells } from "~/server/db/schema";
 
 export const cellRouter = createTRPCRouter({
   createColumn: protectedProcedure
